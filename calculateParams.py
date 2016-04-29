@@ -46,10 +46,9 @@ def extinctMag(m, merr, A):
 # Function to calculate absolute magnitudes. Takes as inputs: distance (Mpc),
 # total extinction-corrected integrated magnitude and error on that magnitude.
 # Returns: extinction-corrected absolute magnitude with error.
-def absMag(DMpc, mtot0, merr):
+def absMag(DMpc, mtot0):
 	Dpc = DMpc*(1E6)
 	M = mtot0-5.*np.log10(Dpc)+5.
-	M = unumpy.uarray(M,merr)
 	return M
 	
 # Function to calculate SFR. Takes as inputs: distance (Mpc), log of the Halpha

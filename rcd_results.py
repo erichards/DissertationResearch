@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from uncertainties import unumpy
-from uncertainties import ufloat
+#from uncertainties import ufloat
 
 ''' Here are all the functions which use the rotfit.out files. '''
 
@@ -10,10 +10,10 @@ def rotfitParams(rcdfile):
 	with open(rcdfile, 'r') as f:
 		galaxyName = f.readline().strip()
 		line = f.readline().split()
-		diskML = line[3]
-		bulgeML = line[6]
-		rc = line[8]
-		vh = line[10]
+		diskML = float(line[3])
+		bulgeML = float(line[6])
+		rc = float(line[8])
+		vh = float(line[10])
 		return galaxyName, diskML, bulgeML, rc, vh
 	
 # Function to calculate Vflat by taking the mean of the rotational velocities
@@ -51,8 +51,10 @@ def rtrans(rcdfile):
 	last = len(r) - 1
 	if all(m > 0.5 for m in Mrat):
 		return r[last]
+		#return 0
 	elif all(m < 0.5 for m in Mrat):
 		return r[0]
+		#return 0
 	else:
 		for i in range(len(r)):
 		# interpolate to find rtrans
@@ -63,7 +65,7 @@ def rtrans(rcdfile):
 				int = Mrat[i] - slope*r[i]
 				Rtrans = (0.5 - int)/slope
 				return Rtrans
-				
+					
 # Function to calculate disk fraction, baryon fraction and dynamical mass at 2.2h.
 def twoPointTwoh(rcdfile, hkpc):
 	# read in the data
@@ -71,7 +73,7 @@ def twoPointTwoh(rcdfile, hkpc):
 	# calculate ratio of baryonic to total mass
 	vstarsq = ((rcd.V_disk**2)+(rcd.V_bulge**2))
 	vgassq = rcd.V_gas**2
-	vobssq = unumpy.uarray((rcd.V_Rot**2), (rcd.V_err**2))
+	vobssq = rcd.V_Rot**2
 	Mrat = (vgassq + vstarsq)/(vobssq)
 	for i in range(len(rcd.Rad)):
 		if rcd.Rad[i] <= 2.2*hkpc and rcd.Rad[i+1] >= 2.2*hkpc:
@@ -109,18 +111,19 @@ def MLast(rcdfile):
 	return MratLast, MdynLast
 	
 # Calculates stellar fraction, baryon fraction and dynamical mass at R25.
-	def baryatR25(rcdfile, r25kpc):
+def baryatR25(rcdfile, r25kpc):
 	# read in the data
 	rcd = pd.read_table(rcdfile, skiprows=[0,1,3], delim_whitespace=True)
 	# calculate ratio of baryonic to total mass
 	vstarsq = ((rcd.V_disk**2)+(rcd.V_bulge**2))
 	vgassq = rcd.V_gas**2
-	vobssq = unumpy.uarray((rcd.V_Rot**2), (rcd.V_err**2))
+	vobssq = rcd.V_Rot**2
 	Mrat = (vgassq + vstarsq)/(vobssq)
 	last = len(rcd.Rad) - 1
 	if rcd.Rad[last] < r25kpc:
 		fracStarl = vstarsq[last]/vobssq[last]
-		fracBaryl = MLast(rcdfile)[0]
+		#fracBaryl = MLast(rcdfile)[0]
+		fracBaryl = Mrat[last]
 		Mdynl = MLast(rcdfile)[1]
 		return fracStarl, fracBaryl, Mdynl
 	else:
