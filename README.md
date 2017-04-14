@@ -1,12 +1,18 @@
 # DissertationResearch
 Repository for scripts used in data analysis for dissertation research.
 
-## Current files:
+## Files
 
- - calculateParams.py: contains functions to calculate various structural and photometric
- properties from the observational data
+ - README.md: this file
+
+ - calculateParams.py: contains functions to calculate various structural and photometric properties from the observational data
+
+- galaxiesEDA.ipynb: working IPython notebook for exploratory analysis
  
  - rcd_results.py: contains functions to calculate and return results from
  the rotation curve decomposition analysis
- 
-- galaxiesEDA.ipynb: IPython notebook where I have been working on exploratory analysis
+
+## Dependencies
+
+The scripts above make use of the following packages:
+- numpy, pandas, uncertainties, matplotlib
